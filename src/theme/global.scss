@@ -1,0 +1,240 @@
+table, th, td {
+  border: 1px solid #eee;
+  border-collapse: collapse;
+}
+
+header{
+  line-height: 50px;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  > a{
+    color: black;
+    margin-right: 10px;
+    &.active{
+      color: coral;
+    }
+  }
+}
+
+.mainTable{
+  width: 100%;
+  border-spacing: 0;
+  tbody{
+    td:nth-of-type(1){
+      white-space: nowrap;
+    }
+    td{
+      padding: 10px;
+    }
+  }
+}
+
+.hotelList{
+  padding: 10px;
+  > div{
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    .host{
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #eee;
+    }
+  }
+}
+
+.channelList{
+  > ul {
+    padding: 20px;
+    > li {
+      border-radius: 20px;
+      border: 1px solid #eee;
+      padding: 20px;
+      position: relative;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      > div:nth-of-type(1){
+        white-space: nowrap;
+        padding-right: 10px;
+        overflow: hidden;
+        > div:nth-of-type(1) {
+          padding-bottom: 10px;
+          text-overflow: ellipsis;
+        }
+        > div:nth-of-type(2) {
+          color: #999;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      > div:nth-of-type(2){
+        display: flex;
+        flex-flow: column;
+        justify-content: end;
+        > div:nth-of-type(1) {
+          font-size: 12px;
+          margin-bottom: 4px;
+        }
+        > div:nth-of-type(2) {
+          height: 20px;
+          .unread{
+            font-weight: bold;
+            text-align: center;
+            font-size: 12px;
+            background-color: red;
+            line-height: 20px;
+            padding: 0 4px;
+            border-radius: 10px;
+            color: #fff;
+            min-width: 20px;
+            display: inline-block;
+            float: right;
+          }
+        }
+      }
+    }
+  }
+  .noChannel{
+    text-align: center;
+  }
+}
+
+.navigator{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  > div{
+    margin: 0 auto;
+    max-width: 768px;
+    width: 100%;
+    display: flex;
+    border: 1px solid #eee;
+    border-bottom: 0;
+    > button{
+      flex: 0 0 50%;
+      width: 50%;
+      height: 50px;
+      background: #FFF;
+      border: 0;
+      &.active{
+        text-decoration: underline;
+      }
+      &:nth-of-type(1){
+        border-right: 1px solid #eee;
+      }
+    }
+  }
+}
+
+.messageWrapper{
+  position: fixed;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow-y: auto;
+  > div{
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    max-width: 768px;
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    .messageHeader{
+      border-bottom: 1px solid #000;
+      height: 50px;
+      line-height: 49px;
+      text-align: center;
+    }
+    .messageList{
+      position: relative;
+      height: 100%;
+      background-color: #eee;
+      > ul{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-height: 100%;
+        overflow-y: auto;
+        padding: 10px 10px 0;
+        .dayBlock{
+          text-align: center;
+          padding: 10px 0;
+        }
+        > li{
+          margin-bottom: 10px;
+          padding: 0 30% 0 0;
+          &.currentUser{
+            padding: 0 0 0 30%;
+            text-align: right;
+            .msgWrap{
+              flex-direction: row-reverse;
+            }
+            .senderName{
+              display: none !important;
+            }
+          }
+          &.isMinFirst{
+            .senderName{
+              display: block;
+            }
+          }
+          &.isMinLast{
+            .msgWrap{
+              .sendTime{
+                display: block;
+              }
+            }
+          }
+          .senderName{
+            padding-bottom: 4px;
+            display: none;
+          }
+          .msgWrap{
+            display: flex;
+            align-items: end;
+            .sendTime{
+              font-size: 12px;
+              margin-right: 2px;
+              display: none;
+            }
+            .message{
+              word-break: break-all;
+              text-align: left;
+              > div{
+                background-color: #FFF;
+                padding: 8px 16px;
+                border-radius: 20px;
+                display: inline-block;
+              }
+              > img{
+                max-width: 500px;
+              }
+            }
+          }
+        }
+      }
+    }
+    > .messageInputBox{
+      min-height: 50px;
+      display: flex;
+      > div{
+        flex: auto;
+        > input{
+          padding: 0 10px;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}
