@@ -25,7 +25,9 @@ function UserFlow() {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="userFlowWrapper">
+      <h1 className="userFlowTitle">고객 FLOW</h1>
+      <div>userId 설정 -> 내 예약 리스트의 host에게 채팅 or 채팅리스트에서 과거 채팅 선택</div><br />
       <div>id : <input ref={userId} /></div><br />
       <ul>
         <li>- id: sendbird 서버 접속시 유저를 식별할 유니크한 값으로 설정. 토큰, 세션같은 바뀌는 값으로 하면 곤란..!</li>

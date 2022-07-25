@@ -15,14 +15,17 @@ function HostFlow() {
     }
   };
   return (
-    <div>
-      <div>등록된 2명의 호스트가 있다고 가정</div>
-      <button onClick={() => submit('test_a_host')}>
-        <div>TEST A HOST</div>
-      </button>
-      <button onClick={() => submit('test_b_host')}>
-        <div>TEST B HOST</div>
-      </button>
+    <div className="hostFlowWrapper">
+      <h1 className="userFlowTitle">호스트 FLOW</h1>
+      <div>userId 설정 -> 채널</div>
+      <div className="hostList">
+        <button onClick={() => submit('test_a_host')}>
+          <div>TEST A HOST</div>
+        </button>
+        <button onClick={() => submit('test_b_host')}>
+          <div>TEST B HOST</div>
+        </button>
+      </div>
     </div>
   );
 }

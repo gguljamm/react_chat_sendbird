@@ -2,6 +2,7 @@ import { useEffect, useContext, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { sendbirdContext } from '../auth/SendbirdProvider';
 import dayjs from 'dayjs';
+import Layout from './Layout';
 
 function Channel() {
   const navigate = useNavigate();
@@ -18,12 +19,12 @@ function Channel() {
   useEffect(() => {
     handleChannel();
     return () => {
+      console.log('채널 구독해지');
       clearHandle('channel');
     };
   }, []);
 
   const sortedChannel = useMemo(() => {
-    console.log('정렬 바꾸기 실행돼유!!');
     const arr = [...channelsRef.current];
     arr.sort((a, b) => {
       return (b.lastMessage?.createdAt || b.createdAt) - (a.lastMessage?.createdAt || a.createdAt);
@@ -41,8 +42,8 @@ function Channel() {
     return gap === 1 ? '어제' : dayjs(datetime).format('M월 D일');
   };
 
-  return (<div>
-    <h1>메세지</h1>
+  return (<Layout>
+    <h1 className="userFlowTitle">메세지</h1>
     <div className="channelList">
       {
         state.channels?.length > 0
@@ -61,13 +62,7 @@ function Channel() {
           : <h1 className="noChannel">텅~</h1>
       }
     </div>
-    <div className="navigator">
-      <div>
-        <button onClick={() => navigate('/userFlow/myPage')}>내 예약</button>
-        <button className="active" onClick={() => {}}>메세지{ state.count ? ` (${ state.count })` : '' }</button>
-      </div>
-    </div>
-  </div>);
+  </Layout>);
 }
 
 export default Channel;

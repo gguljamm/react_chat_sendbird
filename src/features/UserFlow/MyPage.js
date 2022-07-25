@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sendbirdContext } from '../auth/SendbirdProvider';
+import Layout from './Layout';
 
 function MyPage() {
   const navigate = useNavigate();
@@ -25,6 +26,11 @@ function MyPage() {
         `${hostId}`, // 호스트 ID
       ]);
     }
+    /*
+      채널 만드는 함수의 두번째 인자에 array로 초대할 사용자ID를 넣을 수 있는데
+      이거 실제로 만들어보면 항상 나만 채팅방에 있음. 버그인가 싶은데
+      그래서 [34~36줄] 만들어진 채널 멤버에 호스트가 없을 경우 초대하는 방어로직 추가
+    */
     if (channel && !channel.members.some((v) => v.userId === `${hostId}`)) {
       await channel.inviteWithUserIds([`${ hostId }`]);
     }
@@ -34,12 +40,13 @@ function MyPage() {
   useEffect(() => {
     handleChannel();
     return () => {
+      console.log('채널 구독해지');
       clearHandle('channel');
     };
   }, []);
 
-  return (<div>
-    <h1>내 예약 내역</h1>
+  return (<Layout>
+    <h1 className="userFlowTitle">내 예약 내역</h1>
     <div className="hotelList">
       { arr.map((v, index) => (
         <div key={ index }>
@@ -52,13 +59,7 @@ function MyPage() {
         </div>
       )) }
     </div>
-    <div className="navigator">
-      <div>
-        <button className="active" onClick={() => {}}>내 예약</button>
-        <button onClick={() => navigate('/userFlow/message')}>메세지{ state.count ? ` (${ state.count })` : '' }</button>
-      </div>
-    </div>
-  </div>);
+  </Layout>);
 }
 
 export default MyPage;

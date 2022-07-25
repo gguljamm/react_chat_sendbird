@@ -38,6 +38,7 @@ function SendbirdProvider({ children }) {
     channelHandler.onMessageReceived = (channel, message) => {
       if (currentlyJoinedChannel.url === channel.url) {
         pushMessage(message);
+        messageRead(channel);
       }
     };
     channelHandler.onMessageUpdated = (channel, message) => {
@@ -59,7 +60,6 @@ function SendbirdProvider({ children }) {
     const channelHandler = new GroupChannelHandler();
     channelHandler.onChannelChanged = async (channel) => {
       console.log('onChannelChanged');
-      console.log(channel.unreadMessageCount);
       const count = await sb.groupChannel.getTotalUnreadMessageCount();
       const index = stateRef.current.channels.findIndex((v) => v.url === channel.url);
       let newChannels = [];
@@ -72,6 +72,10 @@ function SendbirdProvider({ children }) {
       updateState({ ...stateRef.current, channels: newChannels, count });
     };
     sb.groupChannel.addGroupChannelHandler('channel', channelHandler);
+    const count = await sb.groupChannel.getTotalUnreadMessageCount();
+    if (state.count !== count) {
+      updateState({ ...state, count });
+    }
   }
 
   const clearHandle = async (key) => {
@@ -166,10 +170,13 @@ function SendbirdProvider({ children }) {
 
     const currentUser = sb.currentUser;
 
-    const count = await sb.groupChannel.getTotalUnreadMessageCount();
-    console.log(count);
+    updateState({ ...state, channels: channels, loading: false, settingUpUser: false, currentUser });
+  }
 
-    updateState({ ...state, channels: channels, loading: false, settingUpUser: false, currentUser, count });
+  const getPrevMessage = async (channel, timestamp) => {
+    const messageListParams = {};
+    messageListParams.prevResultSize = 50;
+    return await channel.getMessagesByTimestamp(timestamp, messageListParams);
   }
 
   const messageRead = async (channel) => {
@@ -184,9 +191,11 @@ function SendbirdProvider({ children }) {
     return <div className="error">{state.error} check console for more information.</div>
   }
 
-  console.log('- - - - State object very useful for debugging - - - -');
+  console.log('state update');
 
-  return <sendbirdContext.Provider value={{ state, setupUser, handleCreateChannel, sendMessage, messageRead, handleChannelMessage, clearHandle, handleChannel }}>{ children }</sendbirdContext.Provider>
+  return <sendbirdContext.Provider
+    value={{ state, setupUser, handleCreateChannel, sendMessage, messageRead, handleChannelMessage, clearHandle, handleChannel, getPrevMessage }}
+  >{ children }</sendbirdContext.Provider>
 }
 
 const loadChannels = async () => {

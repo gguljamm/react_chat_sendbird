@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# 샌드버드 + react 채팅 만들기
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 가이드 문서
+- https://sendbird.com/docs/chat/v4/javascript/overview
+- javascript v4 기준으로 제작
 
-## Available Scripts
+## 대시보드 
+- https://dashboard.sendbird.com/
+- 채팅 목록/유저 정보 볼 수 있고
+- 관리자 등록해서 공지 메세지 같은거 보낼 수도 있음
 
-In the project directory, you can run:
+## 샌드버드 UIKit
 
-### `npm start`
+- https://github.com/sendbird/sendbird-uikit-react
+- /src/template 에 있는 두 파일이 uikit 가이드 복붙
+- /openChatSample -> 오픈채팅 예제
+- /groupChatSample -> 그룹채팅 예제
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 샌드버드 UIKit 스토리북
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- https://sendbird.github.io/sendbird-uikit-react
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 구조 설명
 
-### `npm run build`
+### [SendbirdProvider -> setupUser]
+- sendbird 서버에 userId로 연결
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### [channel]
+- 채팅방
+- 무조건 1:1만 있다는 가정으로 제작
+- 고객 <-> 호스트간 1:1 연결
+- SendbirdProvider에 있는 channels가 내가 포함된 채널
+- handleChannel에서 채널이 업데이트 될 경우 channels를 업데이트함
+- lastMessage, 채널별 안읽은 메세지 개수 등 업데이트
+- count는 전체 안읽은 메세지
+- MyPage.js 에서 선택한 호스트와 만들어진 채팅방 없을 경우 새로 만듦
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### [message]
+- 채널별 채팅 리스트
+- Message.js에서 채널별 메세지 호출 및 추가
+- handleChannelMessage에서 해당 채널 메세지 업데이트 감시
+- 현재 도메인에 /userFlow/message/{ channelURL }
+- channelURL: 유니크한 채널의 id

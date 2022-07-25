@@ -9,11 +9,41 @@ header{
   top: 0;
   left: 0;
   right: 0;
+  background-color: #FFF;
+  box-shadow: 0 0 1px 0 rgba(0,0,0,.1);
+  white-space: nowrap;
+  overflow-x: auto;
+  padding: 0 20px;
   > a{
     color: black;
     margin-right: 10px;
     &.active{
       color: coral;
+    }
+    &:last-of-type{
+      margin-right: 0;
+    }
+  }
+}
+
+.userFlowTitle{
+  text-align: center;
+}
+
+.userFlowWrapper{
+  padding: 0 20px;
+}
+
+.hostFlowWrapper{
+  padding: 0 20px;
+  .hostList{
+    > button{
+      width: 100%;
+      border: 1px solid #eee;
+      margin-bottom: 10px;
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 20px 0;
     }
   }
 }
@@ -76,6 +106,7 @@ header{
         display: flex;
         flex-flow: column;
         justify-content: end;
+        white-space: nowrap;
         > div:nth-of-type(1) {
           font-size: 12px;
           margin-bottom: 4px;
@@ -105,28 +136,31 @@ header{
 }
 
 .navigator{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  > div{
-    margin: 0 auto;
-    max-width: 768px;
+  height: 51px;
+  > div {
+    position: fixed;
+    bottom: 0;
+    left:0;
     width: 100%;
-    display: flex;
-    border: 1px solid #eee;
-    border-bottom: 0;
-    > button{
-      flex: 0 0 50%;
-      width: 50%;
-      height: 50px;
-      background: #FFF;
-      border: 0;
-      &.active{
-        text-decoration: underline;
-      }
-      &:nth-of-type(1){
-        border-right: 1px solid #eee;
+    > div{
+      margin: 0 auto;
+      max-width: 768px;
+      width: 100%;
+      display: flex;
+      border: 1px solid #eee;
+      border-bottom: 0;
+      > button{
+        flex: 0 0 50%;
+        width: 50%;
+        height: 50px;
+        background: #FFF;
+        border: 0;
+        &.active{
+          text-decoration: underline;
+        }
+        &:nth-of-type(1){
+          border-right: 1px solid #eee;
+        }
       }
     }
   }
@@ -152,7 +186,17 @@ header{
       border-bottom: 1px solid #000;
       height: 50px;
       line-height: 49px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      > button{
+        background-color: transparent;
+        border: 0;
+        width: 50px;
+        height: 49px;
+      }
+      > div{
+        padding-left: 10px;
+      }
     }
     .messageList{
       position: relative;
@@ -166,58 +210,71 @@ header{
         max-height: 100%;
         overflow-y: auto;
         padding: 10px 10px 0;
-        .dayBlock{
-          text-align: center;
-          padding: 10px 0;
-        }
         > li{
-          margin-bottom: 10px;
-          padding: 0 30% 0 0;
-          &.currentUser{
-            padding: 0 0 0 30%;
-            text-align: right;
-            .msgWrap{
-              flex-direction: row-reverse;
-            }
-            .senderName{
-              display: none !important;
-            }
+          .dayBlock{
+            text-align: center;
+            padding: 10px 0;
           }
-          &.isMinFirst{
-            .senderName{
-              display: block;
+          .messageBlock{
+            margin-bottom: 10px;
+            padding: 0 30% 0 0;
+            &.currentUser{
+              padding: 0 0 0 30%;
+              text-align: right;
+              .msgWrap{
+                justify-content: end;
+                .sendTime{
+                  right: unset;
+                  left: 0;
+                  transform: translateX(-100%);
+                  padding-left: 0;
+                  padding-right: 4px;
+                }
+              }
+              .senderName{
+                display: none !important;
+              }
             }
-          }
-          &.isMinLast{
-            .msgWrap{
-              .sendTime{
+            &.isMinFirst{
+              .senderName{
                 display: block;
               }
             }
-          }
-          .senderName{
-            padding-bottom: 4px;
-            display: none;
-          }
-          .msgWrap{
-            display: flex;
-            align-items: end;
-            .sendTime{
-              font-size: 12px;
-              margin-right: 2px;
+            &.isMinLast{
+              .msgWrap{
+                .sendTime{
+                  display: block;
+                }
+              }
+            }
+            .senderName{
+              padding-bottom: 4px;
               display: none;
             }
-            .message{
-              word-break: break-all;
-              text-align: left;
-              > div{
-                background-color: #FFF;
-                padding: 8px 16px;
-                border-radius: 20px;
-                display: inline-block;
+            .msgWrap{
+              display: inline-block;
+              position: relative;
+              .sendTime{
+                font-size: 12px;
+                display: none;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                padding-left: 4px;
+                transform: translateX(100%);
               }
-              > img{
-                max-width: 500px;
+              .message{
+                word-break: break-all;
+                text-align: left;
+                > div{
+                  background-color: #FFF;
+                  padding: 8px 16px;
+                  border-radius: 20px;
+                  display: inline-block;
+                }
+                > img{
+                  max-width: 500px;
+                }
               }
             }
           }

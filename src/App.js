@@ -38,7 +38,7 @@ function RouterContent() {
 
   return (
     <div style={ location.pathname === '/openChatSample' || location.pathname === '/groupChatSample' ? {} : styleMob }>
-      <header style={{ lineHeight: '50px', position: 'sticky', top: 0, left: 0, right: 0 }}>
+      <header>
         <Link to="/userFlow" className={ location.pathname.startsWith('/userFlow') ? 'active' : '' }>USER FLOW</Link>
         <Link to="/hostFlow" className={ location.pathname.startsWith('/hostFlow') ? 'active' : '' }>HOST FLOW</Link>
         <Link to="/openChatSample" className={ location.pathname.startsWith('/openChatSample') ? 'active' : '' }>오픈채널 샘플</Link>
