@@ -41,8 +41,8 @@ function RouterContent() {
       <header>
         <Link to="/userFlow" className={ location.pathname.startsWith('/userFlow') ? 'active' : '' }>USER FLOW</Link>
         <Link to="/hostFlow" className={ location.pathname.startsWith('/hostFlow') ? 'active' : '' }>HOST FLOW</Link>
-        <Link to="/openChatSample" className={ location.pathname.startsWith('/openChatSample') ? 'active' : '' }>오픈채널 샘플</Link>
-        <Link to="/groupChatSample" className={ location.pathname.startsWith('/groupChatSample') ? 'active' : '' }>그룹채널 샘플</Link>
+        <Link to="/openChatSample" className={ location.pathname.startsWith('/openChatSample') ? 'active' : '' }>오픈채널 UIKIT 샘플</Link>
+        <Link to="/groupChatSample" className={ location.pathname.startsWith('/groupChatSample') ? 'active' : '' }>그룹채널 UIKIT 샘플</Link>
       </header>
       <Routes>
         <Route path="/" element={<Main />}></Route>

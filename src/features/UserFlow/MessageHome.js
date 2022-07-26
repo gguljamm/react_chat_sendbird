@@ -7,9 +7,7 @@ import Message from './Message';
 
 function MessageHome() {
   /*
-    todo: - 이미지 보내기
-          - 채팅 더보기
-          - 채팅 검색 기능??
+    todo: - 채팅 검색 기능??
    */
   const navigate = useNavigate();
   const { channelUrl } = useParams();
@@ -46,10 +44,6 @@ function MessageHome() {
       return messageObject.messageId !== message;
     });
     setMessages({ ...messagesRef.current, messages: updatedMessages });
-  };
-
-  const handleUpdateMessage = (message) => {
-
   };
 
   /* 현재 메시지들 앞에 불러온 메세지들 추가 */
@@ -123,6 +117,22 @@ function MessageHome() {
     messageListRef.current.scrollTo(0, messageListRef.current.scrollHeight - messageListRef.current.offsetHeight);
   };
 
+  const onFileInputChange = (evt) => {
+    if (evt.currentTarget.files && evt.currentTarget.files.length > 0) {
+      const fileMessageParams = {};
+      fileMessageParams.file = evt.currentTarget.files[0];
+      channel.sendFileMessage(fileMessageParams)
+        .onSucceeded((message) => {
+          setMessages([...messagesRef.current, message]);
+        })
+        .onFailed((error) => {
+          console.log(error)
+          console.log("failed")
+        });
+
+    }
+  };
+
   const currentId = state.currentUser.userId;
   return (
     <div className="messageWrapper">
@@ -158,6 +168,8 @@ function MessageHome() {
                     message={v}
                     isMinFirst={isMinFirst}
                     isMinLast={isMinLast}
+                    MoveScrollToBottom={MoveScrollToBottom}
+                    isScrollBottom={isScrollBottom}
                   />
                 </li>
               )
@@ -167,8 +179,22 @@ function MessageHome() {
           { newMessageAlert ? <div className="newMessage" onClick={() => MoveScrollToBottom()}>새로운 메세지 도착 ▼</div> : '' }
         </div>
         <div className="messageInputBox">
-          <div><input ref={ inputMessageRef } onKeyUp={ evt => evt.key === 'Enter' ? submit() : '' } /></div>
-          <button onClick={ () => submit() }>보내기</button>
+          <div>
+            <div><input ref={ inputMessageRef } onKeyUp={ evt => evt.key === 'Enter' ? submit() : '' } /></div>
+            <button onClick={ () => submit() }>보내기</button>
+          </div>
+          <button className="fileUpload">
+            <label htmlFor="upload" >+</label>
+          </button>
+          <input
+            id="upload"
+            className="file-upload-button"
+            type='file'
+            accept="image/*"
+            hidden={true}
+            onChange={ onFileInputChange }
+            onClick={() => { }}
+          />
         </div>
       </div>
     </div>
