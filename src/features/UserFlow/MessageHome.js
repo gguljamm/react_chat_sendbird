@@ -18,6 +18,8 @@ function MessageHome() {
   const [ messages, setMessages ] = useState([]);
   const [ isExistMoreMessage, setExistMoreMessage ] = useState(true);
 
+  const ulRef = useRef(null);
+
   const PAGE_SIZE = 20; // 메세지 한번에 가져오는 size (최초 호출 & 더보기)
 
   const [isScrollBottom, setScrollBottom] = useState(true);
@@ -119,17 +121,26 @@ function MessageHome() {
 
   const onFileInputChange = (evt) => {
     if (evt.currentTarget.files && evt.currentTarget.files.length > 0) {
-      const fileMessageParams = {};
-      fileMessageParams.file = evt.currentTarget.files[0];
-      channel.sendFileMessage(fileMessageParams)
-        .onSucceeded((message) => {
-          setMessages([...messagesRef.current, message]);
+      const file = evt.currentTarget.files[0];
+      console.log(file);
+      const fileMessageParams = {
+        file,
+      };
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = () => {
+        channel.sendFileMessage({
+          ...fileMessageParams,
+          data: `${img.width}_${img.height}`
         })
-        .onFailed((error) => {
-          console.log(error)
-          console.log("failed")
-        });
-
+          .onSucceeded((message) => {
+            setMessages([...messagesRef.current, message]);
+          })
+          .onFailed((error) => {
+            console.log(error)
+            console.log("failed")
+          });
+      }
     }
   };
 
@@ -144,38 +155,39 @@ function MessageHome() {
           </div>
         </div>
         <div className="messageList">
-          <ul ref={messageListRef}>
+          <div className="messageContent" ref={messageListRef}>
             {
               isExistMoreMessage
-              ? <div className="pagingBox">
+                ? <div className="pagingBox">
                   <button onClick={ () => seeMore() }>더보기</button>
                 </div>
-              : ''
+                : ''
             }
-            { messages.map((v, index) => {
-              /* isMinFirst: 같은 minute인데 맨 처음인 것 (이름노출) */
-              const isMinFirst = !messages[index - 1] || (messages[index - 1].sender.userId !== v.sender.userId) || dayjs(v.createdAt).format('HH:mm') !== dayjs(messages[index - 1].createdAt).format('HH:mm')
-              /* isMinLast: 같은 minute인데 맨 나중인 것 (시간노출) */
-              const isMinLast = !messages[index + 1] || (messages[index + 1].sender.userId !== v.sender.userId) || dayjs(v.createdAt).format('YYYYMMDDHHmm') !== dayjs(messages[index + 1].createdAt).format('YYYYMMDDHHmm')
-              /* isDayFirst: 같은 날짜인 것의 맨 처음인 것. (날짜 M월D일 노출) */
-              const isDayFirst = !messages[index - 1] || dayjs(v.createdAt).format('YYYY-MM-DD') !== dayjs(messages[index - 1].createdAt).format('YYYY-MM-DD')
-              return (
-                <li key={ v.messageId }>
-                  {  isDayFirst ? <div className="dayBlock" key={v.createdAt}>{ dayjs(v.createdAt).format('M월D일') }</div> : '' }
-                  <Message
-                    key={v.messageId}
-                    state={state}
-                    message={v}
-                    isMinFirst={isMinFirst}
-                    isMinLast={isMinLast}
-                    MoveScrollToBottom={MoveScrollToBottom}
-                    isScrollBottom={isScrollBottom}
-                  />
-                </li>
-              )
-            }) }
-            <Observer setScrollBottom={setScrollBottom} />
-          </ul>
+            <ul ref={ ulRef }>
+              { messages.map((v, index) => {
+                /* isMinFirst: 같은 minute인데 맨 처음인 것 (이름노출) */
+                const isMinFirst = !messages[index - 1] || (messages[index - 1].sender.userId !== v.sender.userId) || dayjs(v.createdAt).format('HH:mm') !== dayjs(messages[index - 1].createdAt).format('HH:mm')
+                /* isMinLast: 같은 minute인데 맨 나중인 것 (시간노출) */
+                const isMinLast = !messages[index + 1] || (messages[index + 1].sender.userId !== v.sender.userId) || dayjs(v.createdAt).format('YYYYMMDDHHmm') !== dayjs(messages[index + 1].createdAt).format('YYYYMMDDHHmm')
+                /* isDayFirst: 같은 날짜인 것의 맨 처음인 것. (날짜 M월D일 노출) */
+                const isDayFirst = !messages[index - 1] || dayjs(v.createdAt).format('YYYY-MM-DD') !== dayjs(messages[index - 1].createdAt).format('YYYY-MM-DD')
+                return (
+                  <li key={ v.messageId }>
+                    {  isDayFirst ? <div className="dayBlock" key={v.createdAt}>{ dayjs(v.createdAt).format('M월D일') }</div> : '' }
+                    <Message
+                      key={v.messageId}
+                      state={state}
+                      message={v}
+                      isMinFirst={isMinFirst}
+                      isMinLast={isMinLast}
+                      ulRef={ulRef}
+                    />
+                  </li>
+                )
+              }) }
+              <Observer setScrollBottom={setScrollBottom} />
+            </ul>
+          </div>
           { newMessageAlert ? <div className="newMessage" onClick={() => MoveScrollToBottom()}>새로운 메세지 도착 ▼</div> : '' }
         </div>
         <div className="messageInputBox">
