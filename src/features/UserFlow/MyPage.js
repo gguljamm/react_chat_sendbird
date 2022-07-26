@@ -9,13 +9,19 @@ function MyPage() {
   const [arr] = useState([
     {
       hotelName: 'TEST A HOUSE',
+      checkIn: '2022-09-22',
+      checkOut: '2022-09-23',
       hostName: 'TEST A HOST',
       hostId: 'test_a_host',
+      status: '예약됨'
     },
     {
       hotelName: 'TEST B HOUSE',
+      checkIn: '2022-07-12',
+      checkOut: '2022-07-13',
       hostName: 'TEST B HOST',
       hostId: 'test_b_host',
+      status: '이용완료',
     }
   ]);
   const submit = async (hostId) => {
@@ -50,7 +56,8 @@ function MyPage() {
     <div className="hotelList">
       { arr.map((v, index) => (
         <div key={ index }>
-          <h3>{ v.hotelName }</h3>
+          <h3>{ v.hotelName } ({ v.status })</h3>
+          <div>{ v.checkIn } ~ { v.checkOut }</div>
           <div className="host">
             <div>호스트 정보</div>
             <div>{ v.hostName }</div>

@@ -69,7 +69,12 @@ header{
     margin-bottom: 20px;
     border: 1px solid #eee;
     border-radius: 20px;
+    h3 {
+      margin: 0;
+      margin-bottom: 10px;
+    }
     .host{
+      margin-top: 10px;
       width: 100%;
       padding: 10px;
       border: 1px solid #eee;
@@ -202,6 +207,18 @@ header{
       position: relative;
       height: 100%;
       background-color: #eee;
+      .pagingBox{
+        text-align: center;
+        padding-bottom: 20px;
+        > button{
+        }
+      }
+      .newMessage{
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        color: red;
+      }
       > ul{
         position: absolute;
         bottom: 0;

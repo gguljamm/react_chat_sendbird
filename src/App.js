@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import UserFlow from './features/UserFlow/index.js';
 import Channel from './features/UserFlow/Channel.js';
-import Message from './features/UserFlow/Message.js';
+import MessageHome from './features/UserFlow/MessageHome.js';
 import MyPage from './features/UserFlow/MyPage.js';
 import HostFlow from './features/HostFlow/index.js';
 import OpenChatSample from './template/BasicOpenChannelSample';
@@ -56,8 +56,8 @@ function RouterContent() {
             <Route path="/userFlow/myPage" element={<MyPage />}></Route>
             <Route path="/userFlow/message" element={<Channel />}></Route>
             <Route path="/hostFlow/message" element={<Channel />}></Route>
-            <Route path="/userFlow/message/:channelUrl" element={<Message />}></Route>
-            <Route path="/hostFlow/message/:channelUrl" element={<Message />}></Route>
+            <Route path="/userFlow/message/:channelUrl" element={<MessageHome />}></Route>
+            <Route path="/hostFlow/message/:channelUrl" element={<MessageHome />}></Route>
             </>
             : ''
         }

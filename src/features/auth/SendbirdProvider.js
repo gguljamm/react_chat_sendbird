@@ -102,7 +102,6 @@ function SendbirdProvider({ children }) {
       messages[messageIndex] = updatedMessage;
       updateMessage(messages);
     } else {
-      console.log(messageToUpdate, currentlyJoinedChannel, messages, messageInputValue, updateMessage);
       const userMessageParams = {};
       userMessageParams.message = messageInputValue
       currentlyJoinedChannel.sendUserMessage(userMessageParams)
@@ -173,9 +172,9 @@ function SendbirdProvider({ children }) {
     updateState({ ...state, channels: channels, loading: false, settingUpUser: false, currentUser });
   }
 
-  const getPrevMessage = async (channel, timestamp) => {
+  const getPrevMessage = async (channel, timestamp, pageSize) => {
     const messageListParams = {};
-    messageListParams.prevResultSize = 50;
+    messageListParams.prevResultSize = pageSize;
     return await channel.getMessagesByTimestamp(timestamp, messageListParams);
   }
 
