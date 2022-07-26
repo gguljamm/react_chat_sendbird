@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
-const Message = ({ state, message, updateMessage, handleDeleteMessage, isMinFirst, isMinLast }) => {
+const Message = ({ state, message, updateMessage, handleDeleteMessage, isMinFirst, isMinLast, MoveScrollToBottom, isScrollBottom }) => {
   const arrClass = ['messageBlock'];
   if (message.sender.userId === state.currentUser.userId) {
     arrClass.push('currentUser');
@@ -11,6 +12,15 @@ const Message = ({ state, message, updateMessage, handleDeleteMessage, isMinFirs
   if (isMinLast) {
     arrClass.push('isMinLast');
   }
+
+  const [ isBeforeScrollBottom, setFlag ] = useState(true);
+
+  useEffect(() => {
+    if (!isScrollBottom) {
+      setFlag(false);
+    }
+  }, []);
+
   return (
     <div className={arrClass.join(' ')}>
       <div className="senderName">{message.sender.nickname || '(알수없음)'}</div>
@@ -18,7 +28,7 @@ const Message = ({ state, message, updateMessage, handleDeleteMessage, isMinFirs
         <div className="message">
           {
             message.url
-              ? (<img src={message.url} />)
+              ? (<img onLoad={isBeforeScrollBottom ? () => { MoveScrollToBottom() } : () => {}} src={message.url} />)
               : <div>{message.message || ''}</div>
           }
         </div>

@@ -51,7 +51,7 @@ function Channel() {
             { sortedChannel.map((channel, index) => <li key={ channel.url } onClick={() => submit(channel)}>
               <div>
                 <div>{ channel.members.filter((member) => member.userId !== state.currentUser.userId).map((v) => v.nickname).join(', ') || '(알 수 없음)' }</div>
-                <div>{ channel.lastMessage?.message || '\u00A0' }</div>
+                <div>{ channel.lastMessage?.message || (channel.lastMessage?.type?.indexOf('image') >= 0 ? '사진을 보냈습니다.' : '\u00A0') }</div>
               </div>
               <div>
                 <div>{ channel.lastMessage?.createdAt ? formatDate(channel.lastMessage.createdAt) : '\u00A0' }</div>
