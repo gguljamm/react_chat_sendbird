@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { sendbirdContext } from '../auth/SendbirdProvider';
+import { sendbirdContext } from '../@sendbird/SendbirdProvider';
 import { useNavigate } from 'react-router-dom';
 
 function HostFlow() {

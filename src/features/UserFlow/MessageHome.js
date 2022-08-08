@@ -1,5 +1,5 @@
 import { useContext, useRef, useState, useEffect } from 'react';
-import { sendbirdContext } from '../auth/SendbirdProvider';
+import { sendbirdContext } from '../@sendbird/SendbirdProvider';
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from "dayjs";
 import Observer from './Observer';
@@ -13,7 +13,6 @@ function MessageHome() {
   const { channelUrl } = useParams();
   const { state, sendMessage, messageRead, handleChannelMessage, clearHandle, getPrevMessage } = useContext(sendbirdContext);
   const { channels } = state;
-  const channel = channels.find((channel) => channel.url === channelUrl);
   const inputMessageRef = useRef(null);
   const [ messages, setMessages ] = useState([]);
   const [ isExistMoreMessage, setExistMoreMessage ] = useState(true);
@@ -21,6 +20,7 @@ function MessageHome() {
   const ulRef = useRef(null);
 
   const PAGE_SIZE = 20; // 메세지 한번에 가져오는 size (최초 호출 & 더보기)
+  const CHANNEL = channels.find((channel) => channel.url === channelUrl); // 현재 메세지들의 채널 데이터
 
   const [isScrollBottom, setScrollBottom] = useState(true);
   const [beforeScroll, setBeforeScroll] = useState(0);
@@ -54,7 +54,7 @@ function MessageHome() {
       getPrevMessage: timestamp 이전의 page size만큼 메세지 추가로 불러옴
       timestamp: 최초 호출시 new Date().getTime() & 더보기는 맨 앞의 message의 createAt - 1해서 호출
     */
-    const newMessages = await getPrevMessage(channel, timestamp, PAGE_SIZE);
+    const newMessages = await getPrevMessage(CHANNEL, timestamp, PAGE_SIZE);
     setMessages([...newMessages, ...messagesRef.current])
     if (newMessages.length !== PAGE_SIZE) {
       setExistMoreMessage(false);
@@ -83,8 +83,8 @@ function MessageHome() {
   /* 메세지 핸들링 구독 & 현재 메세지 읽음처리 */
   useEffect(() => {
     unshiftMessage(new Date().getTime()).then(() => {
-      handleChannelMessage(channel, messages, pushMessage, updateMessage, deleteMessage);
-      messageRead(channel);
+      handleChannelMessage(CHANNEL, messages, pushMessage, updateMessage, deleteMessage);
+      messageRead(CHANNEL);
     });
     return () => {
       console.log('메세지 구독 해지');
@@ -96,7 +96,8 @@ function MessageHome() {
     if (!inputMessageRef.current.value) {
       return;
     }
-    await sendMessage(false, channel, messages, inputMessageRef.current.value, setMessages);
+    await sendMessage(false, CHANNEL, messages, inputMessageRef.current.value, setMessages);
+    moveScrollToBottom();
     inputMessageRef.current.value = '';
   };
 
@@ -105,7 +106,7 @@ function MessageHome() {
   const moveScroll = () => {
     if (isScrollBottom && (messageListRef.current.scrollHeight > messageListRef.current.offsetHeight)) {
       /* 스크롤 최하단이고 메세지 새로 올 경우 스크롤 맨 밑으로 */
-      MoveScrollToBottom();
+      moveScrollToBottom();
     } else if (beforeScroll) {
       /* 스크롤 위로 올려서 더보기 눌렀을 때, 현재 스크롤 위치 저장하고 추가된 이후 다시 위치 잡음  */
       messageListRef.current.scrollTo(0, messageListRef.current.scrollHeight - messageListRef.current.offsetHeight - beforeScroll);
@@ -115,7 +116,7 @@ function MessageHome() {
     }
   };
 
-  const MoveScrollToBottom = () => {
+  const moveScrollToBottom = () => {
     messageListRef.current.scrollTo(0, messageListRef.current.scrollHeight - messageListRef.current.offsetHeight);
   };
 
@@ -129,7 +130,7 @@ function MessageHome() {
       const img = new Image();
       img.src = URL.createObjectURL(file);
       img.onload = () => {
-        channel.sendFileMessage({
+        CHANNEL.sendFileMessage({
           ...fileMessageParams,
           data: `${img.width}_${img.height}`
         })
@@ -151,7 +152,7 @@ function MessageHome() {
         <div className="messageHeader">
           <button onClick={() => navigate(-1)}>◀︎</button>
           <div>
-            { channel.members.filter((v) => v.userId !== currentId).map((v) => v.nickname).join(',') }
+            { CHANNEL.members.filter((v) => v.userId !== currentId).map((v) => v.nickname).join(',') }
           </div>
         </div>
         <div className="messageList">
@@ -188,7 +189,7 @@ function MessageHome() {
               <Observer setScrollBottom={setScrollBottom} />
             </ul>
           </div>
-          { newMessageAlert ? <div className="newMessage" onClick={() => MoveScrollToBottom()}>새로운 메세지 도착 ▼</div> : '' }
+          { newMessageAlert ? <div className="newMessage" onClick={() => moveScrollToBottom()}>새로운 메세지 도착 ▼</div> : '' }
         </div>
         <div className="messageInputBox">
           <div>

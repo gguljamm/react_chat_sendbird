@@ -249,7 +249,7 @@ header{
                     padding-left: 0;
                     padding-right: 4px;
                   }
-                  .message > div{
+                  .message > .msg{
                     background-color: ivory;
                   }
                 }
@@ -288,18 +288,27 @@ header{
                 .message{
                   word-break: break-all;
                   text-align: left;
-                  > div{
+                  .msg{
                     background-color: #FFF;
                     padding: 8px 16px;
                     border-radius: 20px;
                     display: inline-block;
                   }
-                  > img{
-                    border-radius: 10px;
+                  .img{
+                    min-height: 100px;
+                    min-width: 100px;
                     background-color: #FFF;
-                    max-width: 500px;
-                    width: 100%;
-                    display: block;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    > img{
+                      margin: 0 auto;
+                      max-width: 500px;
+                      width: 100%;
+                      display: block;
+                    }
                   }
                 }
               }

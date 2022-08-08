@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
-import { sendbirdContext } from "../auth/SendbirdProvider";
+import { sendbirdContext } from "../@sendbird/SendbirdProvider";
 
 function Layout({ children }) {
   const navigate = useNavigate();

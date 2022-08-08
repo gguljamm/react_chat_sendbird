@@ -15,10 +15,17 @@ const Message = ({ state, message, updateMessage, handleDeleteMessage, isMinFirs
 
   let size;
   if (message.url && message.data) {
-    size = {
-      width: `${ ulRef.current.offsetWidth * 0.7 }px`,
-      height: `${ message.data.split('_')[1] * ulRef.current.offsetWidth * 0.7 / message.data.split('_')[0] }px`,
-    };
+    if (ulRef.current.offsetWidth * 0.7 < message.data.split('_')[0]) {
+      size = {
+        width: `${ ulRef.current.offsetWidth * 0.7 }px`,
+        height: `${ message.data.split('_')[1] * ulRef.current.offsetWidth * 0.7 / message.data.split('_')[0] }px`,
+      };
+    } else {
+      size = {
+        width: `${ message.data.split('_')[0] }px`,
+        height: `${ message.data.split('_')[1] }px`,
+      };
+    }
   }
 
   return (
@@ -28,8 +35,8 @@ const Message = ({ state, message, updateMessage, handleDeleteMessage, isMinFirs
         <div className="message">
           {
             message.url
-              ? (<img src={message.url} style={ size } />)
-              : <div>{message.message || ''}</div>
+              ? <div className="img"><img src={message.url} style={ size } /></div>
+              : <div className="msg">{message.message || ''}</div>
           }
         </div>
         <div className="sendTime">{dayjs(message.createdAt).format('HH:mm')}</div>

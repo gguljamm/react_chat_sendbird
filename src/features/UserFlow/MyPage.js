@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { sendbirdContext } from '../auth/SendbirdProvider';
+import { sendbirdContext } from '../@sendbird/SendbirdProvider';
 import Layout from './Layout';
 
 function MyPage() {

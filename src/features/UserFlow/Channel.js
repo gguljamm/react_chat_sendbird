@@ -1,6 +1,6 @@
 import { useEffect, useContext, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { sendbirdContext } from '../auth/SendbirdProvider';
+import { sendbirdContext } from '../@sendbird/SendbirdProvider';
 import dayjs from 'dayjs';
 import Layout from './Layout';
 

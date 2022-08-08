@@ -1,6 +1,6 @@
 import { useRef, useContext } from 'react';
 import image from '../../assets/images/chat_id.png';
-import { sendbirdContext } from '../auth/SendbirdProvider';
+import { sendbirdContext } from '../@sendbird/SendbirdProvider';
 import { useNavigate } from 'react-router-dom';
 
 function UserFlow() {

@@ -15,7 +15,7 @@ function SendbirdProvider({ children }) {
 
   const [state, updateState] = useState({
     channels: [],
-    settingUpUser: true,
+    settingUpUser: true, // true: 연결 안됨 , false: 연결됨
     loading: false,
     error: false,
     count: 0,
@@ -32,6 +32,8 @@ function SendbirdProvider({ children }) {
 
   const handleChannelMessage = async (currentlyJoinedChannel, messages, pushMessage, updateMessage, deleteMessage) => {
     console.log('메세지 핸들러 구독');
+    const count = currentlyJoinedChannel.getUnreadMemberCount(messages[messages.length - 1]);// 작동안함
+    console.log(count);
     const channelHandler = new GroupChannelHandler();
     channelHandler.onUserJoined = () => { };
     channelHandler.onChannelChanged = () => { };
@@ -52,6 +54,10 @@ function SendbirdProvider({ children }) {
         deleteMessage(message);
       }
     };
+
+    channelHandler.onUnreadMemberStatusUpdated = (channel, message) => {
+      console.log(channel, message);
+    }
     sb.groupChannel.addGroupChannelHandler('message', channelHandler);
   }
 
@@ -114,34 +120,6 @@ function SendbirdProvider({ children }) {
           console.log("failed")
         });
     }
-  }
-
-  const onFileInputChange = async (e) => {
-    if (e.currentTarget.files && e.currentTarget.files.length > 0) {
-      const { currentlyJoinedChannel, messages } = state;
-      const fileMessageParams = {};
-      fileMessageParams.file = e.currentTarget.files[0];
-      currentlyJoinedChannel.sendFileMessage(fileMessageParams)
-        .onSucceeded((message) => {
-          const updatedMessages = [...messages, message];
-          updateState({ ...state, messages: updatedMessages, messageInputValue: "", file: null });
-
-        })
-        .onFailed((error) => {
-          console.log(error)
-          console.log("failed")
-        });
-
-    }
-  }
-
-  const handleDeleteMessage = async (messageToDelete) => {
-    const { currentlyJoinedChannel } = state;
-    await deleteMessage(currentlyJoinedChannel, messageToDelete); // Delete
-  }
-
-  const updateMessage = async (message) => {
-    updateState({ ...state, messageToUpdate: message, messageInputValue: message.message });
   }
 
   const setupUser = async (obj) => {
@@ -218,20 +196,6 @@ const createChannel = async (channelName, userIdsToInvite) => {
   } catch (error) {
     return [null, error];
   }
-}
-
-const deleteChannel = async (channelUrl) => {
-  try {
-    const channel = await sb.groupChannel.getChannel(channelUrl);
-    await channel.delete();
-    return [channel, null];
-  } catch (error) {
-    return [null, error];
-  }
-}
-
-const deleteMessage = async (currentlyJoinedChannel, messageToDelete) => {
-  await currentlyJoinedChannel.deleteMessage(messageToDelete);
 }
 
 export default SendbirdProvider;

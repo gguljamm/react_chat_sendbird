@@ -9,7 +9,7 @@ import OpenChatSample from './template/BasicOpenChannelSample';
 import GroupChatSample from './template/BasicGroupChannelSample';
 import Main from './features/index.js';
 import './theme/global.scss';
-import SendbirdProvider, { sendbirdContext } from './features/auth/SendbirdProvider';
+import SendbirdProvider, { sendbirdContext } from './features/@sendbird/SendbirdProvider';
 
 function App() {
   return (
