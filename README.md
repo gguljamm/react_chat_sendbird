@@ -47,8 +47,8 @@
 
 /src/constants/constants.js 에 샌드버드 appId 등록 필요
 
-<code>
+```
   export const SENDBIRD_INFO = {
     appId: 'sendbird app id'
   };
-</code>
+```
