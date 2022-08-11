@@ -43,3 +43,12 @@
 - handleChannelMessage에서 해당 채널 메세지 업데이트 감시
 - 현재 도메인에 /userFlow/message/{ channelURL }
 - channelURL: 유니크한 채널의 id
+
+
+/src/constants/constants.js 에 샌드버드 appId 등록 필요
+
+<code>
+  export const SENDBIRD_INFO = {
+    appId: 'sendbird app id'
+  };
+</code>
